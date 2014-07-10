@@ -1,0 +1,28 @@
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse #keep httpresponse if you still have the stub methods for detail, results, and vote).
+#from django.template import RequestContext, loader
+from polls.models import Poll
+#from django.http import Http404
+
+
+def index(request):
+    latest_poll_list = Poll.objects.all().order_by('-pub_date')[:5]
+    context = {'latest_poll_list': latest_poll_list}
+    return render(request, 'polls/index.html', context)
+    
+def detail(request, poll_id):
+    #TRY EXCEPT version
+    #try:
+    #    poll = Poll.objects.get(pk=poll_id)
+    #except Poll.DoesNotExist:
+    #    raise Http404
+    #return render(request, 'polls/detail.html', {'poll': poll})
+
+	#SHORTCUT version
+	poll = get_object_or_404(Poll, pk=poll_id)
+	return render(request, 'polls/detail.html', {'poll': poll})
+def results(request, poll_id):
+    return HttpResponse("You're looking at the results of poll %s." % poll_id)
+
+def vote(request, poll_id):
+    return HttpResponse("You're voting on poll %s." % poll_id)
